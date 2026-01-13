@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="오늘 뭐 먹지? - 메뉴 추천기">
-    <title>🍔 오늘 뭐 먹지?</title>
+    <meta name="description" content="야식 뭐 먹지? - 메뉴 추천기">
+    <title>🍔 야식 뭐 먹지?</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap"
@@ -31,7 +31,7 @@
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: var(--dark-bg);
-            background-image: url('lotto.png'); /* Using same background or could be food.png */
+            background-image: url('food_images/hamburger.png'); /* Changed to hamburger.png */
             background-repeat: repeat;
             background-size: 300px;
             animation: moveBackground 60s linear infinite;
@@ -205,11 +205,11 @@
     <div class="container">
         <nav class="nav-menu">
             <a href="index.html" class="nav-item">🍀 로또</a>
-            <a href="eat.html" class="nav-item active">🍔 오늘 뭐 먹지?</a>
+            <a href="eat.html" class="nav-item active">🍔 야식 뭐 먹지?</a>
         </nav>
 
         <div class="header">
-            <h1 class="title">🍔 오늘 뭐 먹지?</h1>
+            <h1 class="title">🍔 야식 뭐 먹지?</h1>
             <p class="subtitle">결정 장애를 해결해 드릴게요!</p>
             <button class="theme-toggle" id="themeToggle">다크모드</button>
         </div>
@@ -224,11 +224,32 @@
     </div>
 
     <script>
-        const menuList = [
-            '짜장면', '짬뽕', '탕수육', '치킨', '피자', '삼겹살', '초밥', '돈까스', 
-            '김치찌개', '된장찌개', '제육볶음', '냉면', '마라탕', '쌀국수', '햄버거', 
-            '떡볶이', '샌드위치', '샐러드', '파스타', '스테이크', '회', '족발', '보쌈'
-        ];
+        const menuData = {
+            '짜장면': 'jjajangmyeon',
+            '짬뽕': 'jjamppong',
+            '탕수육': 'tangsuyuk',
+            '치킨': 'chicken',
+            '피자': 'pizza',
+            '삼겹살': 'samgyeopsal',
+            '초밥': 'chobap',
+            '돈까스': 'donkkaseu',
+            '김치찌개': 'kimchi-jjigae',
+            '된장찌개': 'doenjang-jjigae',
+            '제육볶음': 'jeyuk-bokkeum',
+            '냉면': 'naengmyeon',
+            '마라탕': 'malatang',
+            '쌀국수': 'ssalguksu',
+            '햄버거': 'hamburger',
+            '떡볶이': 'tteokbokki',
+            '샌드위치': 'sandwich',
+            '샐러드': 'salad',
+            '파스타': 'pasta',
+            '스테이크': 'steak',
+            '회': 'hoe',
+            '족발': 'jokbal',
+            '보쌈': 'bossam'
+        };
+        const menuList = Object.keys(menuData);
 
         const generateBtn = document.getElementById('generateBtn');
         const foodResult = document.getElementById('foodResult');
@@ -266,12 +287,16 @@
                     foodResult.offsetHeight; /* trigger reflow */
                     foodResult.style.animation = 'popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
                     
-                    // Fetch and show image
-                    const imageUrl = `https://image.pollinations.ai/prompt/delicious ${finalMenu} food real photo high quality?width=600&height=400&nologo=true&seed=${Math.random()}`;
-                    foodImage.src = imageUrl;
+                    // Show local image
+                    const imageName = menuData[finalMenu];
+                    foodImage.src = `food_images/${imageName}.png`;
                     foodImage.onload = () => {
                         foodImage.style.display = 'block';
                         foodImage.style.animation = 'fadeInUp 0.5s ease';
+                    };
+                    // Handle image load error
+                    foodImage.onerror = () => {
+                        foodImage.style.display = 'none';
                     };
                 }
             }, 50);
