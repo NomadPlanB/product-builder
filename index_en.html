@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="로또 번호 추천 - 행운의 번호를 찾아보세요">
-    <title>🍀 로또 번호 추천기</title>
+    <meta name="description" content="Lotto Number Generator - Find your lucky numbers">
+    <title>🍀 Lotto Number Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;900&display=swap"
         rel="stylesheet">
     <style>
         * {
@@ -32,7 +32,7 @@
 
 
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             background: var(--dark-bg);
             color: var(--text-primary);
             min-height: 100vh;
@@ -104,7 +104,7 @@
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             box-shadow: 0 8px 25px rgba(6, 182, 212, 0.3);
             position: relative;
             overflow: hidden;
@@ -369,19 +369,19 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="title">🍀 로또 번호 추천기</h1>
-            <p class="subtitle">행운의 번호를 찾아보세요!</p>
-            <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">다크모드</button>
-            <a href="index_en.html" class="theme-toggle" style="text-decoration: none; margin-left: 0.5rem;">English</a>
+            <h1 class="title">🍀 Lotto Number Generator</h1>
+            <p class="subtitle">Find your lucky numbers!</p>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">Dark Mode</button>
+            <a href="index.html" class="theme-toggle" style="text-decoration: none; margin-left: 0.5rem;">한국어</a>
         </div>
 
         <div class="main-card">
-            <button class="generate-btn" id="generateBtn">✨ 행운의 번호 생성하기</button>
+            <button class="generate-btn" id="generateBtn">✨ Generate Lucky Numbers</button>
 
             <div class="result-container" id="resultContainer">
                 <div class="empty-state">
                     <div class="empty-state-icon">🎱</div>
-                    <p>버튼을 눌러 행운의 번호를 받아보세요!</p>
+                    <p>Click the button to get your lucky numbers!</p>
                 </div>
             </div>
         </div>
@@ -394,28 +394,28 @@
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
 
-        // 테마 설정 불러오기
+        // Load Theme Setting
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme === 'dark') {
             body.classList.add('dark-mode');
-            themeToggle.textContent = '화이트모드';
+            themeToggle.textContent = 'Light Mode';
         }
 
-        // 테마 변경 이벤트
+        // Toggle Theme Event
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
             
             if (body.classList.contains('dark-mode')) {
-                themeToggle.textContent = '화이트모드';
+                themeToggle.textContent = 'Light Mode';
                 localStorage.setItem('theme', 'dark');
             } else {
-                themeToggle.textContent = '다크모드';
+                themeToggle.textContent = 'Dark Mode';
                 localStorage.setItem('theme', 'light');
             }
         });
 
 
-        // 로또 번호 생성 함수
+        // Generate Lotto Numbers Function
         function generateLottoNumbers() {
             const numbers = [];
             while (numbers.length < 6) {
@@ -427,7 +427,7 @@
             return numbers.sort((a, b) => a - b);
         }
 
-        // 보너스 번호 생성 함수
+        // Generate Bonus Number Function
         function generateBonusNumber(mainNumbers) {
             let bonus;
             do {
@@ -436,7 +436,7 @@
             return bonus;
         }
 
-        // 번호 색상 결정 함수
+        // Determine Number Color Function
         function getNumberColor(num) {
             if (num <= 10) return 'color-1';
             if (num <= 20) return 'color-2';
@@ -445,7 +445,7 @@
             return 'color-5';
         }
 
-        // 번호 표시 함수 (5세트)
+        // Display Numbers Function (5 sets)
         function displayNumbers(lottoSets) {
             resultContainer.innerHTML = '';
 
@@ -456,7 +456,7 @@
 
                 const label = document.createElement('div');
                 label.className = 'set-label';
-                label.textContent = `${String.fromCharCode(65 + setIndex)}조 추천 번호`;
+                label.textContent = `Set ${String.fromCharCode(65 + setIndex)}`;
                 setContainer.appendChild(label);
 
                 const wrapper = document.createElement('div');
@@ -486,9 +486,9 @@
             });
         }
 
-        // 버튼 클릭 이벤트
+        // Button Click Event
         generateBtn.addEventListener('click', () => {
-            // 5세트 생성
+            // Generate 5 sets
             const lottoSets = [];
             for (let i = 0; i < 5; i++) {
                 const numbers = generateLottoNumbers();
@@ -498,7 +498,7 @@
 
             displayNumbers(lottoSets);
 
-            // 버튼 애니메이션
+            // Button Animation
             generateBtn.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 generateBtn.style.transform = 'scale(1)';
