@@ -234,7 +234,7 @@
             display: flex;
         }
 
-        #webcam-canvas {
+        #webcam-wrapper canvas {
             border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             max-width: 100%;
@@ -455,7 +455,7 @@
                 </div>
 
                 <div class="webcam-container" id="webcamContainer">
-                    <canvas id="webcam-canvas" width="400" height="400"></canvas>
+                    <div id="webcam-wrapper"></div>
                     <div class="input-buttons">
                         <button class="action-btn" id="captureBtn">📸 촬영하기</button>
                         <button class="action-btn secondary" id="closeWebcamBtn">✕ 닫기</button>
@@ -562,23 +562,26 @@
             try {
                 const flip = true;
                 webcam = new tmImage.Webcam(400, 400, flip);
-                await webcam.setup({ facingMode: "user" });
+                await webcam.setup();
                 await webcam.play();
                 isWebcamRunning = true;
 
                 webcamContainer.classList.add('active');
                 previewContainer.classList.remove('active');
 
-                const canvas = document.getElementById('webcam-canvas');
-                const ctx = canvas.getContext('2d');
+                // Teachable Machine 방식: webcam.canvas를 DOM에 직접 추가
+                const webcamWrapper = document.getElementById('webcam-wrapper');
+                webcamWrapper.innerHTML = '';
+                webcamWrapper.appendChild(webcam.canvas);
 
-                function draw() {
-                    if (isWebcamRunning && webcam && webcam.canvas) {
-                        ctx.drawImage(webcam.canvas, 0, 0);
-                        requestAnimationFrame(draw);
+                // 프레임 업데이트 루프
+                function loop() {
+                    if (isWebcamRunning && webcam) {
+                        webcam.update();
+                        window.requestAnimationFrame(loop);
                     }
                 }
-                draw();
+                window.requestAnimationFrame(loop);
             } catch (error) {
                 console.error('웹캠 오류:', error);
                 alert('카메라를 사용할 수 없습니다.\n\n가능한 원인:\n- 카메라 접근 권한이 거부됨\n- 카메라가 연결되지 않음\n- 다른 앱에서 카메라 사용 중\n\n사진 업로드 기능을 이용해주세요.');
@@ -591,6 +594,10 @@
                 isWebcamRunning = false;
             }
             webcamContainer.classList.remove('active');
+            const webcamWrapper = document.getElementById('webcam-wrapper');
+            if (webcamWrapper) {
+                webcamWrapper.innerHTML = '';
+            }
         }
 
         // Close webcam button
@@ -600,11 +607,11 @@
 
         // Capture button click
         captureBtn.addEventListener('click', async () => {
-            if (webcam) {
-                const canvas = document.getElementById('webcam-canvas');
-                currentImageElement = canvas;
+            if (webcam && webcam.canvas) {
+                currentImageElement = webcam.canvas;
+                const canvasToAnalyze = webcam.canvas;
                 stopWebcam();
-                await analyzeImage(canvas);
+                await analyzeImage(canvasToAnalyze);
             }
         });
 
