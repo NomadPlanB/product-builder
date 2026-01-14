@@ -559,25 +559,30 @@
         });
 
         async function startWebcam() {
-            const flip = true;
-            webcam = new tmImage.Webcam(400, 400, flip);
-            await webcam.setup();
-            await webcam.play();
-            isWebcamRunning = true;
+            try {
+                const flip = true;
+                webcam = new tmImage.Webcam(400, 400, flip);
+                await webcam.setup({ facingMode: "user" });
+                await webcam.play();
+                isWebcamRunning = true;
 
-            webcamContainer.classList.add('active');
-            previewContainer.classList.remove('active');
+                webcamContainer.classList.add('active');
+                previewContainer.classList.remove('active');
 
-            const canvas = document.getElementById('webcam-canvas');
-            const ctx = canvas.getContext('2d');
+                const canvas = document.getElementById('webcam-canvas');
+                const ctx = canvas.getContext('2d');
 
-            function draw() {
-                if (isWebcamRunning) {
-                    ctx.drawImage(webcam.canvas, 0, 0);
-                    requestAnimationFrame(draw);
+                function draw() {
+                    if (isWebcamRunning && webcam && webcam.canvas) {
+                        ctx.drawImage(webcam.canvas, 0, 0);
+                        requestAnimationFrame(draw);
+                    }
                 }
+                draw();
+            } catch (error) {
+                console.error('웹캠 오류:', error);
+                alert('카메라를 사용할 수 없습니다.\n\n가능한 원인:\n- 카메라 접근 권한이 거부됨\n- 카메라가 연결되지 않음\n- 다른 앱에서 카메라 사용 중\n\n사진 업로드 기능을 이용해주세요.');
             }
-            draw();
         }
 
         function stopWebcam() {
